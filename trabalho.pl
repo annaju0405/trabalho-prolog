@@ -1,133 +1,173 @@
+% Anna Júlia Cúrcio Marques
+% Flávio Oliveira Morais Leite
+
 :- use_module(library(lists)).
 
+% Fatos
+mochila(amarela).
+mochila(azul).
+mochila(branca).
+mochila(verde).
+mochila(vermelha).
+
+nome(denis).
+nome(joao).
+nome(lenin).
+nome(otavio).
+nome(will).
+
+mes(agosto).
+mes(dezembro).
+mes(janeiro).
+mes(maio).
+mes(setembro).
+
+jogo('3 ou Mais').
+jogo('Caça Palavras').
+jogo('Cubo Vermelho').
+jogo('Jogo da Forca').
+jogo('Prob. de Lógica').
+
+materia(biologia).
+materia(geografia).
+materia(historia).
+materia(matematica).
+materia(portugues).
+
+suco(laranja).
+suco(limao).
+suco(maracuja).
+suco(morango).
+suco(uva).
+
+
+
+
+modelo(Alunos) :- 
+    % criando a lista alunos
+    Alunos = [
+               aluno(Mochila_1, Nome_1, Mes_1, Jogo_1, Materia_1, Suco_1),
+               aluno(Mochila_2, Nome_2, Mes_2, Jogo_2, Materia_2, Suco_2),
+               aluno(Mochila_3, Nome_3, Mes_3, Jogo_3, Materia_3, Suco_3),
+               aluno(Mochila_4, Nome_4, Mes_4, Jogo_4, Materia_4, Suco_4),
+               aluno(Mochila_5, Nome_5, Mes_5, Jogo_5, Materia_5, Suco_5)
+             ],
+    
+    % regras definitivas
+    Suco_3 = morango,
+    Suco_1 = limao,
+    Nome_5 = lenin,
+    (Jogo_1 = 'Cubo Vermelho' ; Jogo_5 = 'Cubo Vermelho'),
+    (Nome_1 = otavio ; Nome_5 = otavio),
+    Jogo_3 = 'Jogo da Forca',
+    
+    % regras de relação
+    member(aluno(_, joao, _, _, historia, _), Alunos),
+    member(aluno(_, _, _, 'Prob. de Lógica', _, uva), Alunos),
+    member(aluno(_, _, _, _, biologia, morango), Alunos),
+    member(aluno(_, _, dezembro, _, matematica, _), Alunos),
+    member(aluno(azul, _, janeiro, _, _, _), Alunos),
+    member(aluno(_, _, _, _, matematica, maracuja), Alunos),
+    
+    % regras de localização
+    aoLado(aluno(_, _, setembro, _, _, _), aluno(_, _, _, _, _, laranja), Alunos),
+    aEsquerda(aluno(azul, _, _, _, _, _), aluno(_, _, maio, _, _, _), Alunos),
+    aoLado(aluno(_, will, _, _, _, _), aluno(_, _, _, 'Prob. de Lógica', _, _), Alunos),
+    exatamenteEsquerda(aluno(branca, _, _, _, _, _), aluno(_, will, _, _, _, _), Alunos),
+    aoLado(aluno(_, _, _, 'Jogo da Forca', _, _), aluno(_, _, _, '3 ou Mais', _, _), Alunos),
+    aDireita(aluno(_, _, _, _, _, uva), aluno(azul, _, _, _, _, _), Alunos),
+    aoLado(aluno(_, _, janeiro, _, _, _), aluno(_, _, setembro, _, _, _), Alunos),
+    exatamenteEsquerda(aluno(_, _, _, _, _,uva), aluno(_, _, _, _, portugues, _), Alunos),
+    aoLado(aluno(_, _, _, 'Prob. de Lógica', _, _), aluno(amarela, _, _, _, _, _), Alunos),
+    aoLado(aluno(_, _, setembro, _, _, _), aluno(_, _, _, 'Cubo Vermelho', _, _), Alunos),
+    aoLado(aluno(_, _, _, 'Jogo da Forca', _, _), aluno(vermelha, _, _, _, _, _), Alunos),
+    
+    %criando o domínio (mochilas)
+    mochila(Mochila_1),
+    mochila(Mochila_2),
+    mochila(Mochila_3),
+    mochila(Mochila_4),
+    mochila(Mochila_5),
+    %criando o domínio (nomes)
+    nome(Nome_1),
+    nome(Nome_2),
+    nome(Nome_3),
+    nome(Nome_4),
+    nome(Nome_5),
+    %criando o domínio (meses)
+    mes(Mes_1),
+    mes(Mes_2),
+    mes(Mes_3),
+    mes(Mes_4),
+    mes(Mes_5),
+    %criando o domínio (jogos)
+    jogo(Jogo_1),
+    jogo(Jogo_2),
+    jogo(Jogo_3),
+    jogo(Jogo_4),
+    jogo(Jogo_5),
+    %criando o domínio (jogos)
+    materia(Materia_1),
+    materia(Materia_2),
+    materia(Materia_3),
+    materia(Materia_4),
+    materia(Materia_5),
+    %criando o domínio (sucos)
+    suco(Suco_1),
+    suco(Suco_2),
+    suco(Suco_3),
+    suco(Suco_4),
+    suco(Suco_5),
+    
+    % tornando único cada valor de um conjunto de domínios
+    alldifferent([Mochila_1, Mochila_2, Mochila_3, Mochila_4, Mochila_5]),
+    alldifferent([Nome_1, Nome_2, Nome_3, Nome_4, Nome_5]),
+    alldifferent([Mes_1, Mes_2, Mes_3, Mes_4, Mes_5]),
+    alldifferent([Jogo_1, Jogo_2, Jogo_3, Jogo_4, Jogo_5]),
+    alldifferent([Materia_1, Materia_2, Materia_3, Materia_4, Materia_5]),
+    alldifferent([Suco_1, Suco_2, Suco_3, Suco_4, Suco_5]).
+
+
+
+% recursão do alldifferent
+alldifferent([]).
+alldifferent([H|T]) :- 
+    not(member(H, T)),
+    alldifferent(T).
+
+% predicados auxilizares de localização
+aoLado(X, Y, Lista) :-
+    nextto(X, Y, Lista) ; nextto(Y, X, Lista).
+
+aEsquerda(X, Y, Lista) :-
+    nth0(IdX, Lista, X),         
+    nth0(IdY, Lista, Y),  
+    IdX < IdY.
+
+aDireita(X, Y, Lista) :-
+    nth0(IdX, Lista, X), 
+    nth0(IdY, Lista, Y),
+    IdX > IdY.
+
+exatamenteEsquerda(X, Y, Lista) :-
+    nth0(IdX, Lista, X), 
+    nth0(IdY, Lista, Y),
+    IdX =:= IdY - 1.    
+
+
+% imprime a lista usando recursão
+imprime_lista([]) :- nl, nl, write(' FIM do imprime_lista '), nl.
+imprime_lista([H|T]) :-
+ nl, write('......................................'), nl,
+ write(H), write(' : '),
+ imprime_lista(T).
+
+
 main :-
-    modelo(S),
-    imprime(S).
-
-modelo(S) :-
-    % Estrutura:
-    % [Pos, Mochila, Nome, Mes, Jogo, Materia, Suco]
-
-    S = [
-        [1, M1, N1, Mes1, J1, Mat1, Su1],
-        [2, M2, N2, Mes2, J2, Mat2, Su2],
-        [3, M3, N3, Mes3, J3, Mat3, Su3],
-        [4, M4, N4, Mes4, J4, Mat4, Su4],
-        [5, M5, N5, Mes5, J5, Mat5, Su5]
-    ],
-
-    % Pistas fortes
-    Su1 = limao,
-    Su3 = morango,
-    N5  = lenin,
-
-    Mat2 = matematica,
-    Mes2 = dezembro,
-    Su2  = maracuja,
-
-    Mat3 = biologia,
-    M3   = azul,
-    Mes3 = janeiro,
-
-    M2 = branca,
-    N3 = will,
-
-    N4  = joao,
-    Mat4 = historia,
-
-    Su4 = uva,
-    J4  = prob_logica,
-
-    Mat5 = portugues,
-    Mes4 = setembro,
-    J5 = cubo_vermelho,
-    Su5 = laranja,
-    M5 = amarela,
-    Mes5 = maio,
-
-    % Usa permutation no que sobrou
-    permutation([verde, vermelha], [M1, M4]),
-    permutation([otavio, denis], [N1, N2]),
-    permutation([agosto], [Mes1]),
-    permutation([caca_palavras, tres_ou_mais, jogo_da_forca], [J1, J2, J3]),
-    permutation([geografia], [Mat1]),
-
-    valida(S),
-    !.
-
-valida(S) :-
-    % 1. Setembro está ao lado de laranja
-    ao_lado([_, _, _, setembro, _, _, _], [_, _, _, _, _, _, laranja], S),
-
-    % 2. João gosta de História
-    member([_, _, joao, _, _, historia, _], S),
-
-    % 3. Mochila azul está à esquerda de maio
-    a_esquerda([_, azul, _, _, _, _, _], [_, _, _, maio, _, _, _], S),
-
-    % 4. Will está ao lado de Prob. de Lógica
-    ao_lado([_, _, will, _, _, _, _], [_, _, _, _, prob_logica, _, _], S),
-
-    % 5. Mochila branca exatamente à esquerda de Will
-    nextto([_, branca, _, _, _, _, _], [_, _, will, _, _, _, _], S),
-
-    % 6. Terceira posição = morango
-    member([3, _, _, _, _, _, morango], S),
-
-    % 7. Uva = Prob. de Lógica
-    member([_, _, _, _, prob_logica, _, uva], S),
-
-    % 8. Jogo da Força ao lado de 3 ou Mais
-    ao_lado([_, _, _, _, jogo_da_forca, _, _], [_, _, _, _, tres_ou_mais, _, _], S),
-
-    % 9. Uva está à direita da mochila azul
-    a_direita([_, _, _, _, _, _, uva], [_, azul, _, _, _, _, _], S),
-
-    % 10. Biologia = morango
-    member([_, _, _, _, _, biologia, morango], S),
-
-    % 11. Janeiro ao lado de setembro
-    ao_lado([_, _, _, janeiro, _, _, _], [_, _, _, setembro, _, _, _], S),
-
-    % 12. Uva exatamente à esquerda de Português
-    nextto([_, _, _, _, _, _, uva], [_, _, _, _, _, portugues, _], S),
-
-    % 13. Matemática = dezembro
-    member([_, _, _, dezembro, _, matematica, _], S),
-
-    % 14. Prob. de Lógica ao lado da mochila amarela
-    ao_lado([_, _, _, _, prob_logica, _, _], [_, amarela, _, _, _, _, _], S),
-
-    % 15. Mochila azul = janeiro
-    member([_, azul, _, janeiro, _, _, _], S),
-
-    % 16. Setembro ao lado de Cubo Vermelho
-    ao_lado([_, _, _, setembro, _, _, _], [_, _, _, _, cubo_vermelho, _, _], S),
-
-    % 17. Primeira posição = limão
-    member([1, _, _, _, _, _, limao], S),
-
-    % 18. Matemática = maracujá
-    member([_, _, _, _, _, matematica, maracuja], S),
-
-    % 19. Lenin na quinta posição
-    member([5, _, lenin, _, _, _, _], S).
-
-ao_lado(X, Y, Lista) :-
-    nextto(X, Y, Lista);
-    nextto(Y, X, Lista).
-
-a_esquerda(X, Y, Lista) :-
-    nth1(PX, Lista, X),
-    nth1(PY, Lista, Y),
-    PX < PY.
-
-a_direita(X, Y, Lista) :-
-    nth1(PX, Lista, X),
-    nth1(PY, Lista, Y),
-    PX > PY.
-
-imprime([]).
-imprime([H|T]) :-
-    write(H), nl,
-    imprime(T).
+    statistics(cputime, Inicio),
+    modelo(Resultado),
+    imprime_lista(Resultado),
+	statistics(cputime, Fim),
+    Tempo is Fim - Inicio,
+    nl,
+    format('Tempo de execucao: ~4f segundos~n', [Tempo]).

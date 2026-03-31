@@ -1,5 +1,6 @@
 % Anna Júlia Cúrcio Marques
 % Flávio Oliveira Morais Leite
+% Dérick Rangel Cordeiro de Oliveira
 
 :- use_module(library(lists)).
 
